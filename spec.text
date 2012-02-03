@@ -1,0 +1,43 @@
+WW attempts to create an online version of the centuries-old Quaker
+tradition of Waiting Worship.
+
+3 screens:
+
+In a worship space:
+  a particular background image
+  an overlay which shows who is in the space, possibly altogether, possibly
+   with fade-in/fade-out
+  an overlay which shows the most recent message
+  a text field for "speaking" a message or a button which shows
+   the text field
+  a 'door' for returning to the worship space door
+  a participant is "in worship" as long as the page keeps the focus
+  messages are queued, keeping at least 7 minutes (possibly
+   controllable) between messages.
+
+At the door to a worship space:
+  same background, waiting worship title, name of space
+  a blank text field for your name
+  (possibly) a blank text field for a "knock phrase"
+  [?email addresses to invite?]
+  a list of who is currently in the worship space
+  a link to a log of the last two hours messages (or since the space was empty)
+  a "notify me" field for an email address to be notified when someone enters
+   the space
+
+At the "open worship" page:
+  Waiting worship header, regular web form:
+   [Worship space name]
+   [Upload background image (or select?)]
+   [Knock phrase (optional)]
+   [your email address (for confirmation)]
+
+At the landing page:
+  Explanation, list of worship spaces you've been in (click to door), and a
+   single form for opening a new worship space
+
+Accounts?:
+  Confirm emails, keep credentials in browser, no passwords
+  Allows sending of email invites, receipt of notifications
+  SMS?
+
