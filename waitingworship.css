@@ -1,0 +1,18 @@
+/* -*- Mode: CSS; character-encoding: utf-8; -*- */
+
+body {
+    font-family: sans,sans-serif; font-size: 16px;
+    background-color: black;
+    background-image: url(bhfm.jpg);}
+
+div.text {
+    background-color: ivory; opacity: 0.5;}
+
+h1 { text-align: center;}
+
+form.entrance { text-align: center;}
+form.entrance input { clear: both; }
+    
+
+
+
