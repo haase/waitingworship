@@ -1,6 +1,8 @@
 WW attempts to create an online version of the centuries-old Quaker
 tradition of Waiting Worship.
 
+Everything is HTTPS.
+
 3 screens:
 
 In a worship space:
@@ -40,4 +42,21 @@ Accounts?:
   Confirm emails, keep credentials in browser, no passwords
   Allows sending of email invites, receipt of notifications
   SMS?
+
+Email is verified if WW:AUTH cookie is email;sig.
+
+Auth link includes email, expiration, and signature.
+
+Alternative uses email and quickly expiring password.
+
+Verified actions:
+  open worship spaces
+  invite others to join you
+  attach phone number (for SMS) to email (further confirmation)
+
+--------- URI scheme
+
+/enter/spaceid
+/waiting/spaceid
+/create
 
