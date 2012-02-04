@@ -17,8 +17,8 @@
   (mysql/open (config 'ww:sqlhost "localhost")
 	      (config 'ww:sqldb "ww")
 	      sql/typemap
-	      (config 'ww:sqluser "sbooks")
-	      (config 'ww:sqlpass "bibliophile")
+	      (config 'ww:sqluser "root")
+	      (config 'ww:sqlpass "")
 	      (if (config 'WW:SSLDB #t)
 		  `#[SSLCA ,sql-cert]
 		  #[])))
@@ -50,8 +50,9 @@
 (define sql/getministers
   (extdb/proc sqldb
     "SELECT minister FROM ministers WHERE space=?"
-    `(%MERGE . ,sql/typemap)))
-(define (getministers space) (sql/getministers (get space 'uuid)))
+    (cons #[%merge #t] sql/typemap)))
+(define (getministers space)
+  (sql/getministers (if (uuid? space) space (get space 'uuid))))
 
 (define sql/addminister
   (extdb/proc sqldb
@@ -63,16 +64,22 @@
     sql/typemap))
 
 (define (enter space minister (uid #f))
-  (sql/addminister (get space 'uuid) minister))
+  (sql/addminister (if (uuid? space) space (get space 'uuid))
+		   minister
+		   (gmtimestamp 'seconds)))
 (define (leave space minister (uid #f))
-  (sql/dropminister (get space 'uuid) minister))
+  (sql/dropminister (if (uuid? space) space (get space 'uuid))
+		    minister))
 
 (define sql/addmessage
   (extdb/proc sqldb
     "INSERT INTO messages
-                 (msgid,minister,content,spoken)
-          VALUES (?,?,?,?)"
+                 (msgid,space,content,minister,spoken)
+          VALUES (?,?,?,?,?)"
     sql/typemap))
+(define (addmessage space content minister
+		    (uuid (getuuid)) (tstamp (gmtimestamp 'seconds)))
+  (sql/addmessage uuid space content minister tstamp))
 
 (define sql/lastmessage
   (extdb/proc sqldb
@@ -105,15 +112,13 @@
     "UPDATE messages SET shared=? WHERE msgid=?"
     sql/typemap))
 
-(define (getmessage space (interval 1200))
+(define (getmessage space (interval 60))
   (let ((tstamp (if (timestamp? interval) interval
 		    (timestamp+ (- interval)))))
-    (try (sql/lastmessage/since (get space 'uuid) tstamp)
-	 (let ((next (sql/nextmessage (get space 'uuid))))
-	   (sql/sharemessage (get next 'msgid) (gmtimestamp 'seconds))
-	   (sql/lastmessage (get space 'uuid))))))
-
-
-
-
-
+    (try (sql/lastmessage/since
+	  (if (uuid? space) space (get space 'uuid))
+	  tstamp)
+	 (let* ((uuid (if (uuid? space) space (get space 'uuid)))
+		(next (sql/nextmessage uuid)))
+	   (sql/sharemessage (gmtimestamp 'seconds) (get next 'msgid))
+	   (try next (sql/lastmessage/since uuid tstamp))))))

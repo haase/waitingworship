@@ -30,7 +30,8 @@
 	(tr* ((class "listening"))
 	  (td* ((class "left"))
 	    (img src "speak.png" alt "“speak”" onclick "speak(event);"))
-	  (td* ((class "message")) (get message 'text))
+	  (td* ((class "message"))
+	    (span ((class "content")) (get message 'text)))
 	  (td* ((class "right"))
 	    (img src "door.png" alt "leave" onclick "leave(event);")))
 	(tr* ((class "listening"))
@@ -51,7 +52,7 @@
       (div ((id "WAITING"))
 	)))
 
-(define (main (path_info #f))
-  (req/set! 'space (getspace path_info))
+(define (main (spaceid #f))
+  (req/set! 'space (getspace spaceid))
   (req/call waitingpage))
 

@@ -13,7 +13,8 @@
   (body! 'class "entrancepage")
   (h1 (get space 'name))
   (form ((action (stringout "/waiting/" (uuid->string (get space 'uuid))))
-	 (class "enterform"))
+	 (method "POST") (class "enterform"))
+    (input type "HIDDEN" name "SPACE" value (get space 'uuid))
     "Your Name"
     (input type "TEXT" name "NAME" value "" placeholder "your name")
     (input type "SUBMIT" name "ACTION" value "Enter"))

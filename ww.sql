@@ -4,7 +4,7 @@ CREATE TABLE spaces (
    uuid BINARY(16) PRIMARY KEY,
    name VARCHAR(128) NOT NULL,
    about TEXT,
-   background VARCHAR(128),
+   mural VARCHAR(128),
    icon VARCHAR(128),
    knock VARCHAR(128));
 
@@ -22,5 +22,5 @@ CREATE TABLE messages (
    content TEXT,
    spoken DATETIME NOT NULL,
    shared DATETIME);
-CREATE INDEX msgs_by_space on messages(wspace);
+CREATE INDEX msgs_by_space on messages(space);
 
