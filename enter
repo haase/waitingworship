@@ -1,0 +1,22 @@
+;;; -*- Mode: Scheme; character-encoding: utf-8; -*-
+
+;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
+
+(use-module 'updatefile)
+
+(updatefile (get-component "common.scm"))
+
+(define (enterpage (path_info #f) (space #f))
+  (stylesheet! "waitingworship.css")
+  (javascript! "waitingworship.js")
+  (title! (get space 'name))
+  (form ((action (stringout "/waiting/" (uuid->string (get space 'uuid)))))
+    (input type "TEXT" name "NAME" value "")
+    (input type "SUBMIT" name "ACTION" value "Enter"))
+  (div ((id "INSTRUCTION")) (xhtml/include enter.html))
+  (div ((id "WAITING"))
+    (do-choices (minister (getministers (get space 'uuid)))
+      (div ((class "minister")) minister))))
+
+(define (main (path_info #f))
+  )

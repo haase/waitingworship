@@ -1,0 +1,31 @@
+;;; -*- Mode: Scheme; character-encoding: utf-8; -*-
+
+;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
+
+(use-module 'updatefile)
+
+(updatefile (get-component "common.scm"))
+
+(define (waitingpage (path_info #f) (space #f))
+  (stylesheet! "waitingworship.css")
+  (javascript! "waitingworship.js")
+  (when (exists? (get space 'background))
+    (htmlheader
+     (xmlblock STYLE (())
+       (xhtml "body {background-image: '"
+	 (get space 'background) "';}\n"))))
+  (title! (get space 'name))
+  (div ((id "MESSAGE")) (getmessage space 1200))
+  (img src "speak.png" alt "“speak”" onclick "speak(event);")
+  (img src "leave.png" alt "leave" onclick "leave(event);")
+  (form ((action (stringout "/waiting/" (get space 'uuid))))
+    (xmlblock textarea ((NAME "MESSAGE")))
+    (input type "SUBMIT" name "ACTION" value "Share")
+    (input type "SUBMIT" name "ACTION" value "Cancel"))
+  (div ((id "INSTRUCTION")) (xhtml/include waiting.html))
+  (div ((id "WAITING"))
+    (do-choices (minister (getministers (get space 'uuid)))
+      (div ((class "minister")) minister))))
+
+(define (main (path_info #f)) (req/call waitingpage))
+
