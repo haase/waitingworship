@@ -1,0 +1,40 @@
+;;; -*- Mode: Scheme; character-encoding: utf-8; -*-
+
+;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
+
+(use-module 'updatefile)
+
+(updatefile (get-component "common.scm"))
+
+(define (prepareform (name #f))
+  (form ()
+    (table* ((class "prepareform"))
+      (tr (th "Name") (td (input TYPE "TEXT" NAME "NAME" VALUE (or name ""))))
+      (tr (th "About")
+	  (td (xmlblock TEXTAREA ((NAME "DESCRIPTION")))))
+      (tr (th "Mural")
+	  (td (input TYPE "FILE" NAME "MURAL")))
+      (tr (th "Invite")
+	  (td (input TYPE "TEXT" NAME "EMAIL")))
+      (tr (th (input TYPE "SUBMIT" NAME "ACTION" VALUE "Create"))
+	  (td (xhtml/include prepare.html))))))
+
+(define (preparepage (space #f))
+  (stylesheet! "waitingworship.css")
+  (javascript! "waitingworship.js")
+  (title! (get space 'name))
+  (body! 'class "entrancepage")
+  (h1 (get space 'name))
+  (form ((action (stringout "/waiting/" (uuid->string (get space 'uuid))))
+	 (class "enterform"))
+    "Your Name"
+    (input type "TEXT" name "NAME" value "" placeholder "your name")
+    (input type "SUBMIT" name "ACTION" value "Enter"))
+  (div ((class "text") (id "INSTRUCTION")) (xhtml/include enter.html))
+  (div ((class "text") (id "MINISTERS"))
+    (do-choices (minister (getministers (get space 'uuid)))
+      (div ((class "minister")) minister))))
+
+(define (main (path_info #f))
+  (req/set! 'space (getspace path_info))
+  (req/call enterpage))
