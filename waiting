@@ -9,11 +9,11 @@
 (define (waitingpage (space #f) (name #f))
   (stylesheet! "/waitingworship.css")
   (javascript! "/waitingworship.js")
-  (when (exists? (get space 'background))
+  (when #t ;; (exists? (get space 'background))
     (htmlheader
-     (xmlblock STYLE (())
-       (xhtml "body {background-image: '"
-	 (get space 'background) "';}\n"))))
+     (xmlblock STYLE ()
+       (xhtml "body {background-image: url('"
+	 (try (get space 'background) "bhfm.jpg") "');}\n"))))
   (title! (get space 'name))
   (let ((message (getmessage space))
 	(ministers (getministers space)))
@@ -62,6 +62,8 @@
     (enter (getspace spaceid) name)
     (set-cookie! 'ww:name name)
     (req/call waitingpage)))
+
+
 
 
 
