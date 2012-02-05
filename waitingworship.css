@@ -1,18 +1,86 @@
 /* -*- Mode: CSS; character-encoding: utf-8; -*- */
 
 body {
-    font-family: sans,sans-serif; font-size: 16px;
-    background-color: black;
-    background-image: url(bhfm.jpg);}
+    font-family: sans,sans-serif; font-size: 24px;
+    margin-left: 0px; margin-right: 0px;
+    background-color: black; color: silver;
+    /* background-image: url(/bhfm.jpg); */
+    background-repeat: no-repeat;
+    background-position: top center;}
+body.narrative {
+    max-width: 40em; margin-left: auto; margin-right: auto;}
 
 div.text {
-    background-color: ivory; opacity: 0.5;}
+    background-color: ivory; opacity: 0.75; color: black;
+    margin: 5px; padding: 5px;
+    margin-left: auto; margin-right: auto;
+    max-width: 40em; width: 80%;}
 
-h1 { text-align: center;}
+h1 {
+    color: ivory; text-align: center; margin-top: 0px;
+    margin-left: 40px; margin-right: 40px;}
 
-form.entrance { text-align: center;}
-form.entrance input { clear: both; }
+form.entrance {
+    text-align: center; max-width: 40em;
+    margin-left: auto; margin-right: auto;}
+form.entrance { }
+form.entrance input[name='NAME'] {
+    text-align: center; min-width: 80%; font-size: 125%;
+    margin-left: auto; margin-right: auto;}
+form.entrance button {
+    font-size: 200%;}
+
+.minister { color: gold;}
+
+body#WAITINGPAGE div#MINISTRY {
+    position: fixed; height: 50%; top: 0px; width: 100%;
+    text-align: center;}
+body#WAITINGPAGE div#MINISTRY img {
+    background-color: silver; z-index: 50;}
+body#WAITINGPAGE div#MINISTRY img[alt='speak'] { float: left;}
+body#WAITINGPAGE div#MINISTRY img[alt='leave'] { float: right;}
+body#WAITINGPAGE div#MINISTRY textarea {
+    max-width: 40em; min-width: 80%; height: 8em;
+    margin-left: auto; margin-right: auto;
+    clear: both;}
+body#WAITINGPAGE div#MINISTRY div#MESSAGE { clear: both;}
+body#WAITINGPAGE div#MINISTERS {
+    position: fixed; height: 50%; bottom: 0px; width: 100%;
+    text-align: center;}
+div#MINISTERS div.minister {
+    text-align: center;}
     
+div#MINISTRY h1, div#MINISTERS h1 { margin-top: 0px;}
+
+body#WAITINGPAGE #MINISTER { font-weight: bold; font-size: 75%; }
+body#WAITINGPAGE #MESSAGECONTENT {
+    font-style: italic; padding-top: 1em;}
+
+body#WAITINGPAGE form {
+    margin-left: 5%; margin-right: 5%;
+    display: none;}
+body#WAITINGPAGE.speaking form { display: block;}
+body#WAITINGPAGE.speaking div#MINISTRY img { display: none;}
+body#WAITINGPAGE.speaking div#MINISTRY #MESSAGE { display: none;}
+body#WAITINGPAGE.speaking div#MINISTRY #MINISTER { display: none;}
+
+body#WAITINGPAGE div#MINISTRY h1, body#WAITINGPAGE div#MINISTRY div#MESSAGE {
+    transition-property: opacity;
+    -webkit-transition-property: opacity;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    transition-duration: 10s; -webkit-transition-duration: 10s;
+    -moz-duration: 10s; -o-transition-duration: 10s;}
+
+body#WAITINGPAGE div#MINISTRY h1 {
+    opacity: 0.4;}
+body#WAITINGPAGE div#MINISTRY div#MESSAGE {
+    opacity: 0;}
+body.hearing#WAITINGPAGE div#MINISTRY h1 { opacity: 1;}
+body.hearing#WAITINGPAGE div#MINISTRY div#MESSAGE {
+    opacity: 1;}
 
 
+body#WAITINGPAGE form input[value='Cancel'] { float: left;}
+body#WAITINGPAGE form input[value='Share'] { float: right;}
 

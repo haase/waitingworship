@@ -6,8 +6,7 @@
 
 (updatefile (get-component "common.scm"))
 
-(define (enterpage (space #f) (ww:name ""))
-  (updatefile common.scm)
+(define (leavepage (space #f) (minister #f))
   (stylesheet! "/waitingworship.css")
   (javascript! "/waitingworship.js")
   (title! (get space 'name))
@@ -17,17 +16,20 @@
     (input type "HIDDEN" name "SPACEID"
 	   value (uuid->string (get space 'uuid)))
     "Your Name"
-    (div () (input type "TEXT" name "NAME" value ww:name
+    (div () (input type "TEXT" name "NAME" value ""
 		   placeholder "enter your name"))
     (div ()
       (xmlblock BUTTON ((name "ACTION") (value "Enter"))
 	"Enter")))
   (div ((class "text") (id "INSTRUCTION")) (xhtml/include enter.html))
   (div ((id "MINISTERS"))
-    (h1 "Those Gathered")
     (do-choices (minister (getministers (get space 'uuid)))
       (div ((class "minister")) minister))))
 
-(define (main (path_info #f))
-  (req/set! 'space (getspace path_info))
-  (req/call enterpage))
+(define (main (space #f) (name #f))
+  (updatefile common.scm)
+  (leave (getspace space) name)
+  (req/set! 'doctype #f)
+  (req/set! 'status 303)
+  (httpheader "Location: /enter/" space))
+

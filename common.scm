@@ -2,14 +2,16 @@
 
 ;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
 
-(use-module '{texttools fdweb xhtml extdb mysql crypto
+(use-module '{texttools fdweb xhtml jsonout extdb mysql crypto
 	      updatefile xhtml/include})
 
+(define common.scm (get-component "common.scm"))
 (define waiting.html (get-component "waiting.html"))
 (define enter.html (get-component "enter.html"))
 (define prepare.html (get-component "prepare.html"))
 
-(define-init sql/typemap #[])
+(define-init sql/typemap
+  `#[uuid ,getuuid space ,getuuid msgid ,getuuid])
 
 (define sql-cert (get-component "sqlcert.pem"))
 
@@ -27,11 +29,16 @@
   (extdb/proc sqldb "SELECT * FROM spaces WHERE uuid=?" sql/typemap))
 (define (getspace input)
   (if (string? input)
-      (if (string-strings-with? input "/")
+      (if (string-starts-with? input "/")
 	  (sql/getspace (getuuid (subseq input 1)))
 	  (sql/getspace (getuuid input)))
       (if (uuid? input) (sql/getspace input)
 	  (error "Bad space identifier"))))
+
+(define getspaces
+  (extdb/proc sqldb
+    "SELECT uuid,name,about FROM ministers,spaces WHERE space=uuid"
+    sql/typemap))
 
 (define sql/newspace
   (extdb/proc sqldb
@@ -39,12 +46,12 @@
     sql/typemap))
 (define sql/newspace+mural
   (extdb/proc sqldb
-    "INSERT INTO SPACES (name,uuid,about,mural) VALUES (?,?,?,?)"
+    "INSERT INTO SPACES (uuid,name,about,mural) VALUES (?,?,?,?)"
     sql/typemap))
 (define (newspace name (uuid (getuuid)) (about #f) (mural #f))
   (if mural
-      (sql/newspace+mural name uuid (qc (or about {})) mural)
-      (sql/newspace name uuid (qc (or about {}))))
+      (sql/newspace+mural uuid name (qc (or about {})) mural)
+      (sql/newspace uuid name (qc (or about {}))))
   uuid)
 
 (define sql/getministers
@@ -79,7 +86,8 @@
     sql/typemap))
 (define (addmessage space content minister
 		    (uuid (getuuid)) (tstamp (gmtimestamp 'seconds)))
-  (sql/addmessage uuid space content minister tstamp))
+  (sql/addmessage uuid (if (uuid? space) space (get space 'uuid))
+		  content minister tstamp))
 
 (define sql/lastmessage
   (extdb/proc sqldb

@@ -1,0 +1,21 @@
+;;; -*- Mode: Scheme; character-encoding: utf-8; -*-
+
+;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
+
+(use-module '{updatefile})
+
+(updatefile (get-component "common.scm"))
+
+(define (main (space #f) (sync #f))
+  (let* ((space (getspace space))
+	 (message (getmessage space (timestamp sync)))
+	 (response `#[sync ,(time)
+		      ministers ,(lexsorted (getministers space))]))
+    (when (exists? message)
+      (store! response 'words (get message 'content))
+      (store! response 'minister (get message 'minister)))
+    (req/set! 'doctype #f)
+    (req/set! 'content-type "application/json")
+    (jsonout response)))
+
+

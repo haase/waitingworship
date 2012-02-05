@@ -7,8 +7,8 @@
 (updatefile (get-component "common.scm"))
 
 (define (prepareform (name #f))
-  (stylesheet! "waitingworship.css")
-  (javascript! "waitingworship.js")
+  (stylesheet! "/waitingworship.css")
+  (javascript! "/waitingworship.js")
   (title! "Prepare a new space for waiting worship")
   (body! 'class "preparepage")
   (h1 "Prepare an online worship space")

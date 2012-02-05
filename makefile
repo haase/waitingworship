@@ -4,6 +4,6 @@ chain.pem: root.pem class.pem
 	cat root.pem class.pem > chain.pem
 
 ssl.xkey:
-	echo "batmohk"
+	echo "witl"
 	openssl rsa -in ssl.key -out ssl.xkey
 
