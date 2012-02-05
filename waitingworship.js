@@ -27,6 +27,7 @@ var ww_timeout=false;
 
 function updatefn(){
     if ((ww_speaking)||(!(navigator.onLine))) {
+	ww_timeout=setTimeout(updatefn,ww_update);
 	return;}
     var req=new XMLHttpRequest();
     var uri="https://waitingworship.org/update?SPACE="+ww_space+
