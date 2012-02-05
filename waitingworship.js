@@ -17,7 +17,7 @@ function hear() {
 
 function setupWaiting(){
     var body=document.body;
-    body.onblur=leave;
+    // body.onblur=leave;
     if (body.className==='hearing')
 	setTimeout(function(){body.className='listening';},
 		   30000);

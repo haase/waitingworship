@@ -38,6 +38,7 @@
 		  (uuid->string space)))))
 
 (define (main (action #f))
+  (updatefile common.scm)
   (if (equal? action "Create")
       (req/call createspace)
       (req/call prepareform)))

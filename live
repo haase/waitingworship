@@ -1,0 +1,33 @@
+;;; -*- Mode: Scheme; character-encoding: utf-8; -*-
+
+;;; Copyright (C) 2012 Ken Haase.  All rights reserved.
+
+(use-module 'updatefile)
+
+(updatefile (get-component "common.scm"))
+
+(define (livepage)
+  (updatefile common.scm)
+  (stylesheet! "/waitingworship.css")
+  (javascript! "/waitingworship.js")
+  (title! "waitingworship.org: live worship spaces")
+  (body! 'class "listpage")
+  (h1 "active waiting worship spaces")
+  (let ((spaces (getlivespaces)))
+    (do-choices (space spaces)
+      (p* ((class "worshipspace"))
+	(if (exists? (get space 'icon))
+	    (img src (get space 'icon) alt (get space 'icon)
+		 style "float: right; border: 0px;"))
+	(anchor (stringout "https://waitingworship.org/enter/"
+		  (uuid->string (get space 'uuid)))
+	  (get space 'name))
+	#|
+	" (" (get space 'attending) " minister"
+	(if (> (get space 'attending) 1) "s") ")  "
+	|#
+	"  "
+	(if (exists? (get space 'about)) (xhtml about))))))
+
+(define (main) (req/call livepage))
+

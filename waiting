@@ -26,14 +26,15 @@
     (body! 'id "WAITINGPAGE"  'onload "setupWaiting();"
 	   'class (if (exists? message) "hearing" "listening"))
     (div ((id "MINISTRY"))
-      (img src "/speak.png" alt "speak" onclick "speak();"
-	   title "tap to share a message")
-      (anchor (scripturl "/leave"
-		  'space (uuid->string (get space 'uuid))
-		  'name name)
-	(img src "/door.png" alt "leave"
-	     title "tap to leave worship"))
-      (h1 "Message")
+      (h1 
+	(img src "/speak.png" alt "speak" onclick "speak();"
+	     title "tap to share a message")
+	(anchor (scripturl "/leave"
+		    'space (uuid->string (get space 'uuid))
+		    'name name)
+	  (img src "/door.png" alt "leave"
+	       title "tap to leave worship"))
+	(span ((class "title")) "Message"))
       (div ((id "MESSAGE")
 	    (onclick "hear();")
 	    (title "Tap to re-veal the last message."))
@@ -41,12 +42,12 @@
 	(div ((id "MINISTER") (class "minister"))
 	  (try (get message 'minister) "")))
       (form ((action "/waiting") (method "POST"))
-	(input TYPE "SUBMIT" NAME "ACTION" VALUE "Share")
-	(input TYPE "SUBMIT" NAME "ACTION" VALUE "Cancel")
+	(input TYPE "HIDDEN" NAME "NAME" VALUE name)
 	(input TYPE "HIDDEN" NAME "SPACEID"
 	       VALUE (uuid->string (get space 'uuid)))
-	(input TYPE "HIDDEN" NAME "NAME" VALUE name)
-	(xmlblock textarea ((NAME "MESSAGE") (id "MESSAGETEXT")))))
+	(input TYPE "SUBMIT" NAME "ACTION" VALUE "Cancel")
+	(xmlblock textarea ((NAME "MESSAGE") (id "MESSAGETEXT")))
+	(input TYPE "SUBMIT" NAME "ACTION" VALUE "Share")))
     (div ((id "MINISTERS"))
       (h1 "Those Gathered")
       (div ((id "MINISTERLIST"))

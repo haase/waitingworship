@@ -24,3 +24,7 @@ CREATE TABLE messages (
    shared DATETIME);
 CREATE INDEX msgs_by_space on messages(space);
 
+CREATE VIEW livespaces AS
+  SELECT uuid,name,about,icon,knock,count(minister) as attending
+    FROM spaces,ministers
+   WHERE uuid=space;

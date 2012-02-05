@@ -9,6 +9,10 @@
 (define waiting.html (get-component "waiting.html"))
 (define enter.html (get-component "enter.html"))
 (define prepare.html (get-component "prepare.html"))
+(define site.cfg
+  (tryif (file-exists? (get-component "site.cfg"))
+    (get-component "site.cfg")))
+(load-config site.cfg)
 
 (define-init sql/typemap
   `#[uuid ,getuuid space ,getuuid msgid ,getuuid])
@@ -42,11 +46,11 @@
 
 (define sql/newspace
   (extdb/proc sqldb
-    "INSERT INTO SPACES (uuid,name,about) VALUES (?,?,?)"
+    "INSERT INTO spaces (uuid,name,about) VALUES (?,?,?)"
     sql/typemap))
 (define sql/newspace+mural
   (extdb/proc sqldb
-    "INSERT INTO SPACES (uuid,name,about,mural) VALUES (?,?,?,?)"
+    "INSERT INTO spaces (uuid,name,about,mural) VALUES (?,?,?,?)"
     sql/typemap))
 (define (newspace name (uuid (getuuid)) (about #f) (mural #f))
   (if mural
@@ -130,3 +134,15 @@
 		(next (sql/nextmessage uuid)))
 	   (sql/sharemessage (gmtimestamp 'seconds) (get next 'msgid))
 	   (try next (sql/lastmessage/since uuid tstamp))))))
+
+;;; Listing worship spaces
+
+(define getlivespaces
+  (extdb/proc sqldb
+    "SELECT * FROM livespaces WHERE attending>=1"
+    sql/typemap))
+
+(define getallspaces
+  (extdb/proc sqldb
+    "SELECT * FROM spaces"
+    sql/typemap))
